@@ -8,10 +8,11 @@ const App = (): ReactElement => {
   useEffect(() => {
     // Vérifie si un token est présent dans le sessionStorage
     const token = sessionStorage.getItem('token');
-
+    console.log('Token found:', token); 
+  
     if (token) {
       // Si un token est trouvé, rediriger vers le dashboard
-      navigate(`/${rootPaths.homeRoot}/dashboard`);
+      navigate(`/${rootPaths.homeRoot}`);
     } else {
       // Sinon, rediriger vers la page de connexion
       navigate(`/${rootPaths.authRoot}/login`);

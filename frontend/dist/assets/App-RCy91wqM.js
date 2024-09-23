@@ -1,1 +1,0 @@
-import{u as s,r as a,a as e,j as r,O as n}from"./index-Mp10o8wC.js";const i=()=>{const t=s();return a.useEffect(()=>{const o=sessionStorage.getItem("token");t(o?e.homeRoot:`/${e.authRoot}/login`)},[t]),r.jsx(n,{})};export{i as default};

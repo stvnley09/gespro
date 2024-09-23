@@ -55,7 +55,7 @@ const SignUp = (): ReactElement => {
         // Stocker le token dans sessionStorage
         sessionStorage.setItem('token', data.token);
         // Rediriger vers la page d'accueil
-        navigate(rootPaths.homeRoot);
+        navigate(`/${rootPaths.homeRoot}/dashboard`);
       } else {
         console.error('Erreur lors de l\'inscription:', data.message);
       }
@@ -87,7 +87,7 @@ const SignUp = (): ReactElement => {
       >
         <Stack justifyContent="center" gap={5}>
           <Typography variant="h3" textAlign="center" color="text.secondary">
-            Créer un compte
+            Créez un compte
           </Typography>
           <Typography variant="h6" fontWeight={500} textAlign="center" color="text.primary">
             Vous avez déjà un compte?{' '}
@@ -200,7 +200,7 @@ const SignUp = (): ReactElement => {
             }}
           />
 
-          <Button onClick={handleSubmit}>Sign Up</Button>
+          <Button onClick={handleSubmit}>S'inscrire</Button>
           <Typography variant="body1" textAlign="center">
             Vous êtes d'accord avec nos{' '}
             <Link href="#!" underline="none">

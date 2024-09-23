@@ -1,5 +1,5 @@
-import { SpacingOptions } from '@mui/system/createTheme/createSpacing';
+import { SpacingOptions } from '@mui/material/node_modules/@mui/system/createTheme/createSpacing';
 
-const spacing: SpacingOptions | undefined = (factor: number) => `${factor * 4}px`; // Exemple d'unité de 4px
+const spacing: SpacingOptions | undefined = 4;
 
 export default spacing;

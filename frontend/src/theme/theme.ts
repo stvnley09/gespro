@@ -4,6 +4,7 @@ import components from './component-overrides';
 import breakpoints from './breakpoints';
 import typography from './typography';
 import palette from './palette';
+import spacing from './spacing';
 import shape from './shape';
 
 const theme: ThemeOptions = createTheme({
@@ -11,6 +12,7 @@ const theme: ThemeOptions = createTheme({
   components: components,
   typography: typography,
   palette: palette,
+  spacing: spacing,
   shape: shape,
 });
 

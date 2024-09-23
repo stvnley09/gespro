@@ -1,0 +1,1 @@
+import{u as s,r as a,a as e,j as n,O as r}from"./index-Cy7K_-I9.js";const i=()=>{const t=s();return a.useEffect(()=>{const o=sessionStorage.getItem("token");console.log("Token found:",o),t(o?`/${e.homeRoot}`:`/${e.authRoot}/login`)},[t]),n.jsx(r,{})};export{i as default};

@@ -24,9 +24,12 @@ dotenv.config();
 const app = express();
 
 // Définir le répertoire pour les fichiers statiques de React
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
-app.use(cors()); //Pour gérer les cors
+app.use(cors({
+  origin: 'http://localhost:3000', // URL de ton frontend React
+  credentials: true,
+})); //Pour gérer les cors
 app.use(bodyParser.json()); //Pour parser les requêtes JSON
 app.use(logger('dev'));
 app.use(express.json());
@@ -51,7 +54,7 @@ app.use('/api/tasks', authMiddleware, taskRoutes); // Route pour les tâches pro
 
 // Servir l'application React pour toutes les autres routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 // Utiliser le middleware d'erreur

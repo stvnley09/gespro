@@ -40,9 +40,10 @@ const Login = (): ReactElement => {
       sessionStorage.setItem('token', response.data.token);
 
       // Redirection vers la page d'accueil
-      navigate(rootPaths.homeRoot);
+      navigate(`/${rootPaths.homeRoot}`);
     } catch (error: any) {
-      setErrorMessage('Invalid login credentials');
+      console.error('Erreur lors de la connexion:', error.response || error.message || error);
+      setErrorMessage('Identifiants de connexion invalides');
     }
   };
 
@@ -60,7 +61,7 @@ const Login = (): ReactElement => {
       <Paper sx={{ py: 6, px: { xs: 5, sm: 7.5 } }}>
         <Stack justifyContent="center" gap={5}>
           <Typography variant="h3" textAlign="center" color="text.secondary">
-            Connection
+            Connexion
           </Typography>
           <Typography variant="h6" fontWeight={500} textAlign="center" color="text.primary">
             Aucun compte ?{' '}
