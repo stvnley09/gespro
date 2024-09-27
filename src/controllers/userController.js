@@ -1,11 +1,17 @@
 // controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+dotenv.config();
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
 
 // Fonction pour générer un JWT
 const generateToken = (user) => {
+  if (!process.env.JWT_SECRET || !process.env.JWT_EXPIRES_IN) {
+    throw new Error('JWT_SECRET or JWT_EXPIRES_IN is not defined');
+  }
+
   return jwt.sign(
     { id: user.id, username: user.username, role: user.role },
     process.env.JWT_SECRET,
@@ -34,10 +40,12 @@ exports.signup = async (req, res) => {
 
     // Générer un JWT
     const token = generateToken(user);
+    console.log('Token généré:', token);
 
     res.status(201).json({ token });
   } catch (err) {
     res.status(500).json({ message: 'Erreur serveur', error: err.message });
+    console.error('Erreur lors de la génération du token:', err);
   }
 };
 

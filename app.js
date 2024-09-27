@@ -7,8 +7,7 @@ const sequelize = require('./config/db');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
-var indexRouter = require('./routes/index');
+const mime = require('mime');
 
 // Importer les nouvelles routes
 const projectRoutes = require('./src/routes/projectRoutes');
@@ -23,11 +22,8 @@ const authMiddleware = require('./src/middlewares/authMiddleware')
 dotenv.config();
 const app = express();
 
-// Définir le répertoire pour les fichiers statiques de React
-app.use(express.static(path.join(__dirname, 'frontend')));
-
 app.use(cors({
-  origin: 'http://localhost:3000', // URL de ton frontend React
+  origin: 'http://localhost:3000', // URL frontend React
   credentials: true,
 })); //Pour gérer les cors
 app.use(bodyParser.json()); //Pour parser les requêtes JSON
@@ -54,7 +50,7 @@ app.use('/api/tasks', authMiddleware, taskRoutes); // Route pour les tâches pro
 
 // Servir l'application React pour toutes les autres routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
 });
 
 // Utiliser le middleware d'erreur
@@ -63,6 +59,14 @@ app.use(errorHandler);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+app.use((req, res, next) => {
+  const mimeType = mime.getType(req.path);
+  if (mimeType) {
+    res.setHeader('Content-Type', mimeType);
+  }
+  next();
 });
  
 // error handler
@@ -74,14 +78,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-//configurer le port
-const PORT = process.env.PORT || 4000;
-
-//Lancer le serveur
-app.listen(PORT, () => {
-  console.log('Serveur lancé sur le port ' + PORT);
 });
 
 module.exports = app;

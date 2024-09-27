@@ -7,8 +7,8 @@ const Project = sequelize.define('Project', {
   end_date: { type: DataTypes.DATE },
   status: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.TEXT },
-  createdAt: {type: Date, field: 'created_at'},
-  updatedAt: {type: Date, field: 'updated_at'}
+  createdAt: {type: DataTypes.DATE, field: 'created_at'},
+  updatedAt: {type: DataTypes.DATE, field: 'updated_at'}
 }, {
   timestamps: true,
 });

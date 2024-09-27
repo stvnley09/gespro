@@ -27,6 +27,7 @@ const SignUp = (): ReactElement => {
     password: '',
     confirmPassword: '',
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -36,6 +37,17 @@ const SignUp = (): ReactElement => {
   };
 
   const handleSubmit = async () => {
+    // Vérification côté client avant d'envoyer au serveur
+    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+      setErrorMessage('Tous les champs doivent être remplis.');
+      return;
+    }
+  
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage('Les mots de passe ne correspondent pas.');
+      return;
+    }
+  
     try {
       const response = await fetch('http://localhost:4000/api/users/signup', {
         method: 'POST',
@@ -48,21 +60,27 @@ const SignUp = (): ReactElement => {
           password: formData.password,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         // Stocker le token dans sessionStorage
-        sessionStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token);
         // Rediriger vers la page d'accueil
-        navigate(`/${rootPaths.homeRoot}/dashboard`);
+        navigate(`/${rootPaths.homeRoot}`);
+      } else if (data.message.includes('email')) {
+        setErrorMessage('Cet email est déjà utilisé.');
+      } else if (data.message.includes('password')) {
+        setErrorMessage('Le mot de passe est invalide.');
       } else {
-        console.error('Erreur lors de l\'inscription:', data.message);
+        setErrorMessage('Erreur lors de l\'inscription : ' + data.message);
       }
     } catch (error) {
       console.error('Erreur serveur:', error);
+      setErrorMessage('Erreur de connexion au serveur.');
     }
   };
+  
 
   const handleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -95,6 +113,9 @@ const SignUp = (): ReactElement => {
               Connectez vous
             </Link>
           </Typography>
+
+          {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+
           <TextField
             variant="filled"
             label="Nom d'utilisateur"

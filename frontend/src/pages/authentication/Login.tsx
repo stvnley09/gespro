@@ -29,6 +29,11 @@ const Login = (): ReactElement => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async () => {
+    if (!email || !password) {
+      setErrorMessage('Veuillez remplir tous les champs.');
+      return;
+    }
+
     try {
       // Appel à l'API pour se connecter
       const response = await axios.post('http://localhost:4000/api/users/login', {
@@ -36,14 +41,23 @@ const Login = (): ReactElement => {
         password,
       });
 
-      // Si la connexion réussit, on stocke le token dans sessionStorage
-      sessionStorage.setItem('token', response.data.token);
+      // Si la connexion réussit, token dans sessionStorage
+      localStorage.setItem('token', response.data.token);
 
       // Redirection vers la page d'accueil
       navigate(`/${rootPaths.homeRoot}`);
     } catch (error: any) {
       console.error('Erreur lors de la connexion:', error.response || error.message || error);
-      setErrorMessage('Identifiants de connexion invalides');
+      if (error.response && error.response.status === 404) {
+        // Cas où l'email n'existe pas
+        setErrorMessage('Cet email n\'existe pas.');
+      } else if (error.response && error.response.status === 401) {
+        // Cas où le mot de passe est incorrect
+        setErrorMessage('Le mot de passe est incorrect.');
+      } else {
+        // Autres erreurs
+        setErrorMessage('Erreur lors de la connexion. Veuillez réessayer.');
+      }
     }
   };
 

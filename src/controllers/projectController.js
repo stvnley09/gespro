@@ -187,6 +187,32 @@ exports.updateUserRoleInProject = async (req, res) => {
   }
 };
 
+// Récupérer les projets d'un utilisateur connecté
+exports.getUserProjects = async (req, res) => {
+  try {
+    const userId = req.user.id; // Récupérer l'ID de l'utilisateur à partir du token JWT
+    console.log('le putain de token ' + userId);
+
+    const userProjects = await ProjectUser.findAll({
+      where: { user_id: userId },
+      // include: [
+      //   {
+      //     model: ProjectUser,
+      //     attributes: ['project_id'],
+      //   },
+      // ],
+    });
+
+    console.log('userProjects ' + userProjects);
+    // const projects = userProjects.map(projectUser => projectUser.Project);
+    res.status(200).json({msg : "success"});
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des projets de l\'utilisateur', error });
+    console.log(error);
+  }
+};
+
+
 // Afficher un projet par ID
 // exports.getProjectById = async (req, res) => {
 //   try {
